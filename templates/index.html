@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PinPoint: Guess the Event</title>
+  <!-- Link to your custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Link to Leaflet's CSS for the interactive map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <!-- Include the canvas-confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <h1>📍 PinPoint the Past</h1>
+  
+  <!-- Navigation: Display clickable username if authenticated -->
+  {% if current_user.is_authenticated %}
+    <p>
+      Welcome, <a href="{{ url_for('account') }}">{{ current_user.username }}</a>!
+      <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+    </p>
+  {% else %}
+    <p>
+      <a href="{{ url_for('login') }}"><button>Login</button></a>
+      <a href="{{ url_for('register') }}"><button>Create Account</button></a>
+    </p>
+  {% endif %}
+  
+  <p>
+    <strong>Year:</strong> <span id="gameYear">{{ year }}</span>
+  </p>
+  <p>
+    <strong>Hint:</strong> {{ hint }}
+  </p>
+  <p>Click anywhere on the map to make your guess!</p>
+  
+  <!-- The container for your interactive map -->
+  <div id="map"></div>
+  
+  <!-- Confirmation button, initially hidden via CSS -->
+  <button id="confirmBtn" onclick="confirmGuess()">Confirm Guess</button>
+  
+  <!-- A container where results (event details, distance, etc.) will be displayed -->
+  <div id="result"></div>
+  
+  <!-- Slider container for selecting a year from 0 to 2025 (hidden by default) -->
+  <div id="slider-container" style="display:none; margin-top:20px;">
+    <h2>Play with Another Year</h2>
+    <div style="width:80%; margin: 0 auto;">
+      <input type="range" id="yearSlider" min="0" max="2025" value="{{ year }}" step="1" style="width:100%;" oninput="syncYearInput(this.value)">
+    </div>
+    <div style="margin-top:10px;">
+      <input type="number" id="yearInput" min="0" max="2025" value="{{ year }}" oninput="syncYearSlider(this.value)">
+    </div>
+    <button onclick="playSelectedYear()">Play with this Year</button>
+  </div>
+  
+  <!-- Load Leaflet JS for map functionality -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Load your custom JavaScript for map interactions -->
+  <script src="{{ url_for('static', filename='map.js') }}"></script>
+</body>
+</html>

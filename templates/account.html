@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Account - PinPoint the Past</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Account Details</h1>
+  <p>Username: {{ current_user.username }}</p>
+  
+  {% if average_score is not none %}
+    <p>Average Score: {{ average_score | round(2) }} km</p>
+    <p>Best Score: {{ best_score | round(2) }} km</p>
+    <p>Best Score Date: {{ best_score_date }}</p>
+  {% else %}
+    <p>No scores recorded yet.</p>
+  {% endif %}
+  
+  <p>
+    <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
+    <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+  </p>
+</body>
+</html>
